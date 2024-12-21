@@ -1,2 +1,2 @@
-# hangman-C
+# CHangman
 Simply console hangman written in C
