@@ -14,23 +14,29 @@ void check_win(char *word, char *guessed_letters, char *answer);
 int main(void) {
     const char *hangman[] = {"|----|\n", " |    |\n", " |    O\n", " |   /|\\\n", " |   / \\ \n"};
     char word[20], answer[20];
-    int wrong_attempts = 0;
+    int play = 1;
     srand(time(NULL));
-    select_word(word);
-    strcpy(answer, word);
-    char *guessed_letters = create_guessed_letters(word);
-    while (wrong_attempts <= 4) {
-        if(wrong_attempts > 0) {
-            write_hangman(hangman, wrong_attempts-1);
+    while(play == 1) {
+        int wrong_attempts = 0;
+        select_word(word);
+        strcpy(answer, word);
+        char *guessed_letters = create_guessed_letters(word);
+        while (wrong_attempts <= 4) {
+            if(wrong_attempts > 0) {
+                write_hangman(hangman, wrong_attempts-1);
+            }
+            write_board(word, guessed_letters);
+            check_letters(word, guessed_letters, &wrong_attempts);
+            check_win(word, guessed_letters, answer);
         }
-        write_board(word, guessed_letters);
-        check_letters(word, guessed_letters, &wrong_attempts);
-        check_win(word, guessed_letters, answer);
+        write_hangman(hangman, 4);
+        printf("\nYou lost!\n");
+        printf("The answer was: %s", answer);
+        free(guessed_letters);
+        printf("Do you want play again? (1-Yes, 2-No):");
+        scanf("%d", &play);
     }
-    write_hangman(hangman, 4);
-    printf("\nYou lost!\n");
-    printf("The answer was: %s", answer);
-    free(guessed_letters);
+    printf("Thanks for playing!");
 }
 
 void write_hangman(const char **hangman, int count) {
